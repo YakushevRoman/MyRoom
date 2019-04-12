@@ -7,6 +7,4 @@ import retrofit2.http.GET;
 
 public interface MessagesApi {
 
-    @GET("messages1.json")
-    Call<List<Message>> mListCall();
 }

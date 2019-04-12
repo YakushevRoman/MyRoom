@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import e.user301.myroom.Network.NetPojo;
+import e.user301.myroom.Network.NetworkServise;
 import e.user301.myroom.Retrofit2.Message;
 import e.user301.myroom.Retrofit2.MessagesApi;
 import e.user301.myroom.RoomPackage.AppDataBase;
@@ -52,19 +54,34 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        MessagesApi messagesApi = retrofit.create(MessagesApi.class);
-        Call<List<Message>> listCall = messagesApi.mListCall();
-        listCall.enqueue(new Callback<List<Message>>() {
-            @Override
-            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
-                Log.d(TAG, "onResponse: " + response.body().size());
-            }
+        NetworkServise.getInstance().JSONPlaceHolderApi().getNetPojo(1)
+                .enqueue(new Callback<NetPojo>() {
+                    @Override
+                    public void onResponse(Call<NetPojo> call, Response<NetPojo> response) {
+                        NetPojo netPojo = response.body();
+                        Log.d(TAG, String.format("onResponse: id : %s , title : %s , body %s", netPojo.getId(), netPojo.getTitle(),netPojo.getBody()));
+                    }
 
-            @Override
-            public void onFailure(Call<List<Message>> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<NetPojo> call, Throwable t) {
 
-            }
-        });
+                    }
+                });
+
+        NetworkServise.getInstance().JSONPlaceHolderApi()
+                .getAllList()
+                .enqueue(new Callback<List<NetPojo>>() {
+                    @Override
+                    public void onResponse(Call<List<NetPojo>> call, Response<List<NetPojo>> response) {
+
+                        Log.d(TAG, String.format("onResponse: size : %s",response.body().size()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<NetPojo>> call, Throwable t) {
+
+                    }
+                });
     }
 
     class AddData extends AsyncTask<UserModel, Void, Void>{
