@@ -49,11 +49,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://rawgit.com/startandroid/data/master/messages/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
         NetworkServise.getInstance().JSONPlaceHolderApi().getNetPojo(1)
                 .enqueue(new Callback<NetPojo>() {
                     @Override
@@ -64,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<NetPojo> call, Throwable t) {
-
                     }
                 });
 
@@ -73,12 +67,25 @@ public class MainActivity extends AppCompatActivity {
                 .enqueue(new Callback<List<NetPojo>>() {
                     @Override
                     public void onResponse(Call<List<NetPojo>> call, Response<List<NetPojo>> response) {
-
                         Log.d(TAG, String.format("onResponse: size : %s",response.body().size()));
                     }
 
                     @Override
                     public void onFailure(Call<List<NetPojo>> call, Throwable t) {
+                    }
+                });
+
+        NetworkServise.getInstance()
+                .JSONPlaceHolderApi()
+                .getItem("sunt aut facere repellat provident occaecati excepturi optio reprehenderit", 1)
+                .enqueue(new Callback<NetPojo>() {
+                    @Override
+                    public void onResponse(Call<NetPojo> call, Response<NetPojo> response) {
+                        Log.d(TAG, "onResponse: " + response.body().getBody());
+                    }
+
+                    @Override
+                    public void onFailure(Call<NetPojo> call, Throwable t) {
 
                     }
                 });
